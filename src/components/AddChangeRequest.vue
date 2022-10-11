@@ -20,15 +20,17 @@
 
             <template>
                 <v-combobox v-model="chips" :items="tagNames" chips clearable label="Tags" multiple
-                    prepend-icon="mdi-tag-multiple" solo>
+                    prepend-icon="mdi-tag-multiple" solo v-if="!apiError && tags.length > 0">
                     <template v-slot:selection="{ attrs, item, select, selected }">
-                        <v-chip v-bind="attrs" :input-value="selected" close @click="select"
-                            @click:close="remove(tag)">
+                        <v-chip v-bind="attrs" :input-value="selected" close @click="select" @click:close="remove(tag)">
                             <strong>{{ item }}</strong>&nbsp;
                         </v-chip>
                     </template>
                 </v-combobox>
             </template>
+            <v-alert v-if="apiError" type="error">
+                Could not retrieve tags. Please try again later.
+            </v-alert>
 
             <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
                 Submit
@@ -65,14 +67,17 @@ export default {
             v => !!v || 'Title is required',
             v => (v && v.length <= 100) || 'Title must be less than or equal to 100 characters',
         ],
-        assignedTags: [],
         tags: [],
-        items: ['Programming', 'Playing video games', 'Watching movies', 'Sleeping'],
+        apiError: false
     }),
     mounted() {
         axios
             .get('https://localhost:7060/api/Tags')
             .then(response => (this.tags = response.data))
+            .catch(error => {
+                console.log(error)
+                this.apiError = true
+            })
     },
     computed: {
         tagNames() {
