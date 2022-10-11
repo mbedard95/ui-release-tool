@@ -36,8 +36,22 @@
             </v-list>
         </v-menu>
         <v-spacer></v-spacer>
+        <v-menu open-on-hover offset-y>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                    Tags
+                </v-btn>
+            </template>
 
-        <v-btn href="https://github.com/mbedard95/ReleaseTool" target="_blank" text color="black">
+            <v-list>
+                <v-list-item v-for="(item, index) in tagItems" :key="index">
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+        <v-spacer></v-spacer>
+
+        <v-btn href="https://github.com/mbedard95/ui-release-tool" target="_blank" text color="black">
             <span class="mr-2">Source Code</span>
             <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
@@ -56,6 +70,10 @@ export default {
         userItems: [
             { title: 'Add User' },
             { title: 'View Users' },
+        ],
+        tagItems: [
+            { title: 'Add Tag' },
+            { title: 'View Tags' },
         ],
     }),
 }

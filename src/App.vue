@@ -1,20 +1,22 @@
 <template>
   <v-app>
     <v-main>
-      <HomePage/>
+      <AddChangeRequest/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HomePage from './components/HomePage';
+//import HomePage from './components/HomePage';
+import AddChangeRequest from './components/AddChangeRequest'
 
 export default {
   name: 'App',
 
   components: {
-    HomePage,
-  },
+    //HomePage,
+    AddChangeRequest,
+},
 
   data: () => ({
     //
