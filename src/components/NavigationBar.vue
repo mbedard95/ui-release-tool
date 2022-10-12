@@ -17,8 +17,8 @@
                 </template>
 
                 <v-list>
-                    <v-list-item v-for="(item, index) in changeRequestItems" :key="index">
-                        <v-list-item-title v-bind:href="item.link">{{ item.title }}</v-list-item-title>
+                    <v-list-item v-bind:href="item.link" v-for="(item, index) in changeRequestItems" :key="index">
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -46,8 +46,8 @@
             </template>
 
             <v-list>
-                <v-list-item v-for="(item, index) in adminItems" :key="index">
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item v-bind:href="item.link" v-for="(item, index) in adminItems" :key="index">
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-menu>
@@ -68,7 +68,7 @@ export default {
         changeRequestItems: [
             {
                 title: 'Add Change Request',
-                link: "/AddChangeRequest"
+                link: '#/addchangerequest'
             },
             { title: 'View Change Requests' },
         ],
@@ -77,7 +77,10 @@ export default {
             { title: 'View Users' },
         ],
         adminItems: [
-            { title: 'Tags' },
+            {
+                title: 'Tags',
+                link: '#/tags'
+            },
             { title: 'Groups' },
         ],
     }),

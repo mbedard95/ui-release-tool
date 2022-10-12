@@ -19,7 +19,7 @@
             </v-textarea>
 
             <template>
-                <v-combobox v-model="chips" :items="tagNames" chips clearable label="Tags" multiple
+                <v-combobox v-model="assignedTags" :items="tagNames" assignedTags clearable label="Tags" multiple
                     prepend-icon="mdi-tag-multiple" solo v-if="!apiError && tags.length > 0">
                     <template v-slot:selection="{ attrs, item, select, selected }">
                         <v-chip v-bind="attrs" :input-value="selected" close @click="select" @click:close="remove(tag)">
@@ -31,7 +31,6 @@
             <v-alert v-if="apiError" type="error">
                 Could not retrieve tags. Please try again later.
             </v-alert>
-
             <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
 
             <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
@@ -50,7 +49,7 @@
 </template>
   
 <script>
-import NavigationBar from './NavigationBar';
+import NavigationBar from '@/components/NavigationBar';
 import axios from 'axios';
 export default {
     name: 'AddChangeRequest',
@@ -70,13 +69,14 @@ export default {
             v => (v && v.length <= 100) || 'Title must be less than or equal to 100 characters',
         ],
         tags: [],
+        assignedTags: [],
         apiError: false,
         loading: true
     }),
     mounted() {
         axios
             .get('https://localhost:7060/api/Tags')
-            .then(response => { 
+            .then(response => {
                 this.tags = response.data;
                 this.loading = false;
             })
@@ -105,7 +105,7 @@ export default {
             this.$refs.form.resetValidation()
         },
         remove(tag) {
-            this.chips.splice(this.chips.indexOf(tag), 1)
+            this.assignedTags.splice(this.assignedTags.indexOf(tag), 1)
         }
     },
 }

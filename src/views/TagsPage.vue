@@ -17,7 +17,7 @@
   </template>
   
   <script>
-    import NavigationBar from './NavigationBar';
+    import NavigationBar from '@/components/NavigationBar';
     import axios from 'axios';
   
     export default {
