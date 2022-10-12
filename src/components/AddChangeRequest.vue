@@ -32,6 +32,8 @@
                 Could not retrieve tags. Please try again later.
             </v-alert>
 
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+
             <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
                 Submit
             </v-btn>
@@ -68,12 +70,16 @@ export default {
             v => (v && v.length <= 100) || 'Title must be less than or equal to 100 characters',
         ],
         tags: [],
-        apiError: false
+        apiError: false,
+        loading: true
     }),
     mounted() {
         axios
             .get('https://localhost:7060/api/Tags')
-            .then(response => (this.tags = response.data))
+            .then(response => { 
+                this.tags = response.data;
+                this.loading = false;
+            })
             .catch(error => {
                 console.log(error)
                 this.apiError = true

@@ -1,8 +1,10 @@
 <template>
     <v-app-bar app color="light-blue lighten-5" dark>
         <div class="d-flex align-center">
-            <v-img alt="Alegeus" class="shrink mt-1 hidden-sm-and-down" contain min-width="100"
-                src="https://www.alegeus.com/wp-content/uploads/2020/06/Alegeus_Logo_RGB_Blue.svg" width="100" />
+            <a href="/">
+                <v-img alt="Alegeus" class="shrink mt-1 hidden-sm-and-down" contain min-width="100"
+                    src="https://www.alegeus.com/wp-content/uploads/2020/06/Alegeus_Logo_RGB_Blue.svg" width="100" />
+            </a>
         </div>
 
         <v-spacer></v-spacer>
@@ -16,7 +18,7 @@
 
                 <v-list>
                     <v-list-item v-for="(item, index) in changeRequestItems" :key="index">
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title v-bind:href="item.link">{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -39,12 +41,12 @@
         <v-menu open-on-hover offset-y>
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                    Tags
+                    Admin
                 </v-btn>
             </template>
 
             <v-list>
-                <v-list-item v-for="(item, index) in tagItems" :key="index">
+                <v-list-item v-for="(item, index) in adminItems" :key="index">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -64,16 +66,19 @@ export default {
 
     data: () => ({
         changeRequestItems: [
-            { title: 'Add Change Request' },
+            {
+                title: 'Add Change Request',
+                link: "/AddChangeRequest"
+            },
             { title: 'View Change Requests' },
         ],
         userItems: [
             { title: 'Add User' },
             { title: 'View Users' },
         ],
-        tagItems: [
-            { title: 'Add Tag' },
-            { title: 'View Tags' },
+        adminItems: [
+            { title: 'Tags' },
+            { title: 'Groups' },
         ],
     }),
 }

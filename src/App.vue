@@ -1,23 +1,21 @@
 <template>
   <v-app>
     <v-main>
-      <TagsPage />     
+      <AddChangeRequest />     
     </v-main>
   </v-app>
 </template>
 <script>
 //import HomePage from './components/HomePage';
-//import AddChangeRequest from './components/AddChangeRequest'
-import TagsPage from './components/TagsPage'
+import AddChangeRequest from './components/AddChangeRequest'
 
 export default {
   name: 'App',
 
   components: {
     //HomePage,
-    //AddChangeRequest,
-    TagsPage
-  },
+    AddChangeRequest
+},
 
   data: () => ({
     
