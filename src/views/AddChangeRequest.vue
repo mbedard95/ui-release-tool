@@ -85,7 +85,7 @@ export default {
             })
             .catch(error => {
                 console.log(error)
-                loading = false;
+                this.loading = false;
                 this.apiError = true
             })
     },
