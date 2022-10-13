@@ -47,7 +47,7 @@
 
             <v-list>
                 <v-list-item v-bind:href="item.link" v-for="(item, index) in adminItems" :key="index">
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-menu>
@@ -81,7 +81,10 @@ export default {
                 title: 'Tags',
                 link: '#/tags'
             },
-            { title: 'Groups' },
+            {
+                title: 'Groups',
+                link: '#/groups'
+            },
         ],
     }),
 }
