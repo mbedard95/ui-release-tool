@@ -28,10 +28,13 @@
                     </template>
                 </v-combobox>
             </template>
+
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
             <v-alert v-if="apiError" type="error">
                 Could not retrieve tags. Please try again later.
             </v-alert>
-            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            
+            <v-spacer></v-spacer>
 
             <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
                 Submit
@@ -82,6 +85,7 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+                loading = false;
                 this.apiError = true
             })
     },
