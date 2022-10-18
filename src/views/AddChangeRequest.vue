@@ -36,7 +36,7 @@
             
             <v-spacer></v-spacer>
 
-            <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
+            <v-btn :disabled="!valid" color="success" class="mr-4" @click="addChangeRequest">
                 Submit
             </v-btn>
 
@@ -47,6 +47,9 @@
             <v-btn color="warning" @click="resetValidation">
                 Reset Validation
             </v-btn>
+            <v-alert v-if="message != ''" v-bind:type="alertType">
+        {{message}}
+      </v-alert>
         </v-form>
     </v-container>
 </template>
@@ -74,6 +77,8 @@ export default {
         tags: [],
         assignedTags: [],
         apiError: false,
+        alertType: 'success',
+        message: '',
         loading: true
     }),
     mounted() {
@@ -110,6 +115,26 @@ export default {
         },
         remove(tag) {
             this.assignedTags.splice(this.assignedTags.indexOf(tag), 1)
+        },
+        addChangeRequest() {
+            axios
+        .post('https://localhost:7060/api/ChangeRequests', {
+          title: this.title,
+          description: this.description,
+          releaseSteps: this.releaseSteps,
+          rollbackProcedure: this.rollbackProcedure,
+          tags: this.assignedTags,
+          userId: 'C4D812FA-DFF2-44ED-A330-64413EEECC99'
+        })
+        .then(() => {
+          this.alertType = 'success'
+          this.message = 'Change Request submitted successfully';
+        })
+        .catch(error => {
+          console.log(error);
+          this.alertType = 'error';
+          this.message = error.response.data;
+        });
         }
     },
 }
