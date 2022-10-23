@@ -23,23 +23,22 @@
             <TagsWidget @updateTags="fetchTags($event)" />
             <GroupsWidget @updateGroups="fetchGroups($event)" />
 
-            <v-spacer></v-spacer>
-
-            <v-btn :disabled="!valid" color="success" class="mr-4" @click="addChangeRequest">
-                Submit
-            </v-btn>
-
-            <v-btn color="error" class="mr-4" @click="reset">
-                Reset Form
-            </v-btn>
-
-            <v-btn color="warning" @click="resetValidation">
-                Reset Validation
-            </v-btn>
-            <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-                <div v-for="(message, i) in messages" :key="i">{{message}}</div>
-            </v-alert>
         </v-form>
+        <v-btn :disabled="!valid" color="success" class="mr-4" @click="addChangeRequest">
+            Submit
+        </v-btn>
+
+        <v-btn color="error" class="mr-4" @click="reset">
+            Reset Form
+        </v-btn>
+
+        <v-btn color="warning" @click="resetValidation">
+            Reset Validation
+        </v-btn>
+        <v-alert v-if="messages.length > 0" v-bind:type="alertType">
+            <div v-for="(message, i) in messages" :key="i">{{message}}</div>
+        </v-alert>
+
     </v-container>
 </template>
   
