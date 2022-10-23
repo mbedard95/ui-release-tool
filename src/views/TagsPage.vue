@@ -1,9 +1,13 @@
 <template>
   <v-container>
     <NavigationBar />
-    <v-card class="mx-auto" max-width="300" tile>
+    <v-card class="mx-auto" max-width="600" tile>
+      <v-toolbar color="primary" dark>
+        <v-toolbar-title>Tags</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+      
       <v-list>
-        <v-subheader>Tags</v-subheader>
         <v-list-item-group v-model="selectedTag" color="error">
           <v-list-item v-for="(item, i) in tags" :key="i" :value="item.tagId">
             <v-list-item-content>
@@ -12,20 +16,22 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <v-text-field outlined v-model="newTag" :counter="50" label="Add tag" required>
-      </v-text-field>
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
-        Submit
-      </v-btn>
-      <v-btn :disabled="!selectedTag" color="error" class="mr-4" @click="removeTag">
-        Delete Selected
-      </v-btn>
+      <v-form ref="form" v-model="valid">
+        <v-text-field outlined v-model="newTag" :counter="50" :rules="tagNameRules" label="Add tag" required>
+        </v-text-field>
+        <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
+          Submit
+        </v-btn>
+        <v-btn :disabled="!selectedTag" color="error" class="mr-4" @click="removeTag">
+          Delete Selected
+        </v-btn>
+        <v-alert v-if="messages.length > 0" v-bind:type="alertType">
+          <div v-for="(message, i) in messages" :key="i">{{message}}</div>
+        </v-alert>
+      </v-form>
     </v-card>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-        <div v-for="(message, i) in messages" :key="i">{{message}}</div>
-      </v-alert>
-    </v-form>
+
+
   </v-container>
 </template>
   
@@ -42,12 +48,15 @@ export default {
 
   data: () => ({
     tags: [],
-    newTag: '',
+    newTag: null,
     submitted: false,
     messages: [],
-    valid: true,
+    valid: false,
     selectedTag: null,
-    alertType: 'success'
+    alertType: 'success',
+    tagNameRules: [
+      v => !!v || 'Tag Name is required'
+    ],
   }),
   mounted() {
     axios
@@ -67,6 +76,7 @@ export default {
         .then(() => {
           this.alertType = 'success'
           this.messages.push('Tag submitted successfully');
+          this.$refs.form.reset();
           axios
             .get('https://localhost:7060/api/Tags')
             .then(response => (this.tags = response.data))
@@ -78,7 +88,7 @@ export default {
           console.log(error);
           this.alertType = 'error';
           if (error.response.data.errors) {
-            error.response.data.errors.Name.forEach(error => this.messages.push(error));
+            Object.keys(error.response.data.errors).forEach(key => this.messages.push(error.response.data.errors[key][0]));
           }
           else {
             this.messages.push(error.response.data);

@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AddChangeRequest from '@/views/AddChangeRequest'
+import AddChangeRequestPage from '@/views/AddChangeRequestPage'
 import HomePage from '@/views/HomePage'
 import TagsPage from '@/views/TagsPage'
 import GroupsPage from '@/views/GroupsPage'
+import UserSearch from '@/components/UserSearch'
+import ViewChangeRequestsPage from '@/views/ViewChangeRequestsPage'
 
 Vue.use(VueRouter)
 
@@ -16,7 +18,7 @@ const routes = [
     {
         path: '/addchangerequest',
         name: 'AddChangeRequest',
-        component: AddChangeRequest
+        component: AddChangeRequestPage
     },
     {
         path: '/tags',
@@ -27,6 +29,16 @@ const routes = [
         path: '/groups',
         name: 'Groups',
         component: GroupsPage
+    },
+    {
+      path: '/userSearch',
+      name: 'UserSearch',
+      component: UserSearch
+    },
+    {
+      path: '/viewchangerequests',
+      name: 'ViewChangeRequests',
+      component: ViewChangeRequestsPage
     }
 ]
 
