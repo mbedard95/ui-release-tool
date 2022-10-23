@@ -32,7 +32,7 @@
             </template>
 
             <v-list>
-                <v-list-item v-for="(item, index) in userItems" :key="index">
+                <v-list-item v-bind:href="item.link" v-for="(item, index) in userItems" :key="index">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -70,11 +70,16 @@ export default {
                 title: 'Add Change Request',
                 link: '#/addchangerequest'
             },
-            { title: 'View Change Requests' },
+            {
+                title: 'View Change Requests',
+                link: '#/viewchangerequests'
+            },
         ],
         userItems: [
-            { title: 'Add User' },
-            { title: 'View Users' },
+            {
+                title: 'Edit Active',
+                link: '#/userSearch'
+            },
         ],
         adminItems: [
             {
