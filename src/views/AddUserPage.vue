@@ -2,23 +2,23 @@
     <v-container>
         <NavigationBar />
 
-        <h1>Add Change Request</h1>
+        <h1>Add User</h1>
 
-        <ChangeRequestForm />
+        <UserForm />
 
     </v-container>
 </template>
   
 <script>
 import NavigationBar from '@/components/NavigationBar';
-import ChangeRequestForm from '@/components/ChangeRequestForm'
+import UserForm from '@/components/UserForm'
 
 export default {
-    name: 'AddChangeRequest',
+    name: 'AddUserPage',
 
     components: {
         NavigationBar,
-        ChangeRequestForm
+        UserForm
     }
 }
 </script>

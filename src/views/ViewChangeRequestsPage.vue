@@ -10,8 +10,8 @@
         <v-dialog v-model="detailsDialog">
             <v-card>
                 <ChangeRequestDetails v-bind:changeRequestId="changeRequestId" :key="changeRequestId" />
-                <v-card-actions>
-                    <v-btn color="error" icon large @click="deleteDialog = true;">
+                <v-card-actions>                   
+                    <v-btn color="error" icon x-large @click="deleteDialog = true;">
                         <v-icon dark>
                             mdi-delete-circle
                         </v-icon>
@@ -42,10 +42,16 @@
                     <v-btn color="primary" text @click="deleteDialog = false">
                         Cancel
                     </v-btn>
-                    <v-btn color="error" text @click="deleteDialog = false; detailsDialog = false; deleteChangeRequest()">
+                    <v-btn color="error" text
+                        @click="deleteDialog = false; detailsDialog = false; deleteChangeRequest()">
                         Delete
                     </v-btn>
                 </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="formDialog">
+            <v-card>
+            <ChangeRequestForm />
             </v-card>
         </v-dialog>
     </v-container>
@@ -56,6 +62,7 @@
 import NavigationBar from '@/components/NavigationBar';
 import ChangeRequestSearch from '@/components/ChangeRequestSearch'
 import ChangeRequestDetails from '@/components/ChangeRequestDetails'
+import ChangeRequestForm from '@/components/ChangeRequestForm'
 import axios from 'axios'
 
 export default {
@@ -64,7 +71,8 @@ export default {
     components: {
         NavigationBar,
         ChangeRequestSearch,
-        ChangeRequestDetails
+        ChangeRequestDetails,
+        ChangeRequestForm
     },
 
     data: () => ({
@@ -72,6 +80,7 @@ export default {
         changeRequests: [],
         detailsDialog: false,
         deleteDialog: false,
+        formDialog: false,
         headers: [
             {
                 text: 'Title',

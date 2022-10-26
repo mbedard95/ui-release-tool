@@ -77,8 +77,8 @@ export default {
         ],
         userItems: [
             {
-                title: 'Edit Active',
-                link: '#/userSearch'
+                title: 'Add User',
+                link: '#/addUser'
             },
         ],
         adminItems: [

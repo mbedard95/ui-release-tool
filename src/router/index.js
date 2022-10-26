@@ -4,7 +4,7 @@ import AddChangeRequestPage from '@/views/AddChangeRequestPage'
 import HomePage from '@/views/HomePage'
 import TagsPage from '@/views/TagsPage'
 import GroupsPage from '@/views/GroupsPage'
-import UserSearch from '@/components/UserSearch'
+import AddUserPage from '@/views/AddUserPage'
 import ViewChangeRequestsPage from '@/views/ViewChangeRequestsPage'
 
 Vue.use(VueRouter)
@@ -31,9 +31,9 @@ const routes = [
         component: GroupsPage
     },
     {
-      path: '/userSearch',
-      name: 'UserSearch',
-      component: UserSearch
+      path: '/addUser',
+      name: 'AddUser',
+      component: AddUserPage
     },
     {
       path: '/viewchangerequests',
