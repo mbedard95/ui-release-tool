@@ -1,5 +1,6 @@
 <template>
     <v-app-bar app color="light-blue lighten-5" dark>
+        <PermissionsComponent @updateUser="fetchUser($event)"/>
         <div class="d-flex align-center">
             <a href="/">
                 <v-img alt="Alegeus" class="shrink mt-1 hidden-sm-and-down" contain min-width="100"
@@ -61,8 +62,20 @@
 </template>
   
 <script>
+import PermissionsComponent from '@/components/PermissionsComponent';
+
 export default {
     name: 'NavigationBar',
+
+    components: {
+        PermissionsComponent
+    },
+
+    watch: {
+        userId(){
+            this.$emit('updateUser', this.userId);
+        }
+    },
 
     data: () => ({
         changeRequestItems: [
@@ -80,6 +93,10 @@ export default {
                 title: 'Add User',
                 link: '#/addUser'
             },
+            {
+                title: 'View Users',
+                link: '#/viewusers'
+            }
         ],
         adminItems: [
             {
@@ -91,7 +108,13 @@ export default {
                 link: '#/groups'
             },
         ],
+        userId: ''
     }),
+    methods: {
+        fetchUser(userId) {
+            this.userId = userId
+        }
+    }
 }
 </script>
   

@@ -18,8 +18,9 @@
 
             <TagsWidget @updateTags="fetchTags($event)" /> 
             <GroupsWidget @updateGroups="fetchGroups($event)" />
-
+            
         </v-form>
+
         <v-btn :disabled="!valid" color="success" class="mr-4" @click="addChangeRequest">
             Submit
         </v-btn>
@@ -75,6 +76,11 @@ export default {
         alertType: 'success',
         messages: [],
     }),
+    props: {
+        userId: {
+            type: String
+        }
+    },
     computed: {
         groupNames() {
             let names = [];
@@ -116,7 +122,7 @@ export default {
                     rollbackProcedure: this.rollbackProcedure,
                     tags: this.assignedTags,
                     userGroups: this.assignedGroups,
-                    userId: 'C4D812FA-DFF2-44ED-A330-64413EEECC99'
+                    userId: this.userId
                 })
                 .then(() => {
                     this.alertType = 'success'

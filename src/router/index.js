@@ -6,6 +6,7 @@ import TagsPage from '@/views/TagsPage'
 import GroupsPage from '@/views/GroupsPage'
 import AddUserPage from '@/views/AddUserPage'
 import ViewChangeRequestsPage from '@/views/ViewChangeRequestsPage'
+import ViewUsersPage from '@/views/ViewUsersPage'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
       path: '/addUser',
       name: 'AddUser',
       component: AddUserPage
+    },
+    {
+        path: '/viewusers',
+        name: 'ViewUsers',
+        component: ViewUsersPage
     },
     {
       path: '/viewchangerequests',

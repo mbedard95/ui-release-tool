@@ -33,12 +33,12 @@
                         <v-row>
                             <v-icon :color="approveIcon.color">
                                 {{approveIcon.icon}}
-                            </v-icon>Can approve change requests for assigned groups
+                            </v-icon>Can adjudicate change requests for assigned groups
                         </v-row>
                         <v-row>
                             <v-icon :color="manageTagsIcon.color">
                                 {{manageTagsIcon.icon}}
-                            </v-icon>Can manage new tags
+                            </v-icon>Can manage tags
                         </v-row>
                         <v-row>
                             <v-icon :color="manageUsersIcon.color">
@@ -222,7 +222,7 @@ export default {
                     lastName: this.lastName,
                     emailAddress: this.emailAddress,
                     password: this.password,
-                    userPermissions: this.selectedProfile,
+                    userProfile: this.selectedProfile,
                     groups: this.assignedGroups,
                 })
                 .then(() => {

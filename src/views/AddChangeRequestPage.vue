@@ -1,10 +1,10 @@
 <template>
     <v-container>
-        <NavigationBar />
+        <NavigationBar @updateUser="fetchUser($event)"/>
 
         <h1>Add Change Request</h1>
 
-        <ChangeRequestForm />
+        <ChangeRequestForm :userId="userId"/>
 
     </v-container>
 </template>
@@ -19,6 +19,16 @@ export default {
     components: {
         NavigationBar,
         ChangeRequestForm
+    },
+
+    data: () => ({
+        userId: ''
+    }),
+
+    methods: {
+        fetchUser(userId) {
+            this.userId = userId
+        }
     }
 }
 </script>
