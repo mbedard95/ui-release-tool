@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <NavigationBar />
-    <v-card class="mx-auto" max-width="600" tile>
+    <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
+    <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
       <v-toolbar color="primary" dark>
         <v-toolbar-title>Tags</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
-      
+
       <v-list>
         <v-list-item-group v-model="selectedTag" color="error">
           <v-list-item v-for="(item, i) in tags" :key="i" :value="item.tagId">
@@ -26,10 +26,11 @@
           Delete Selected
         </v-btn>
         <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-          <div v-for="(message, i) in messages" :key="i">{{message}}</div>
+          <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
         </v-alert>
       </v-form>
     </v-card>
+    <AccessDenied v-else />
 
 
   </v-container>
@@ -37,17 +38,21 @@
   
 <script>
 import NavigationBar from '@/components/NavigationBar';
+import AccessDenied from '@/components/AccessDenied';
 import axios from 'axios';
 
 export default {
   name: 'TagsPage',
 
   components: {
-    NavigationBar
+    NavigationBar,
+    AccessDenied
   },
 
   data: () => ({
     tags: [],
+    activeUser: '',
+    activeProfile: '',
     newTag: null,
     submitted: false,
     messages: [],
@@ -117,6 +122,12 @@ export default {
           this.alertType = 'error';
           this.messages.push(error.response.data);
         });
+    },
+    fetchUser(userId) {
+      this.activeUser = userId;
+    },
+    fetchProfile(profile) {
+      this.activeProfile = profile;
     }
   }
 }

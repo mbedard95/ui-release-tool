@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <NavigationBar />
-    <v-card class="mx-auto" max-width="600" tile>
+    <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)"/>
+    <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
       <v-toolbar color="primary" dark>
         <v-toolbar-title>Groups</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -29,20 +29,22 @@
         </v-alert>
       </v-form>
     </v-card>
-
+    <AccessDenied v-else />
 
   </v-container>
 </template>
   
 <script>
 import NavigationBar from '@/components/NavigationBar';
+import AccessDenied from '@/components/AccessDenied'
 import axios from 'axios';
 
 export default {
   name: 'GroupsPage',
 
   components: {
-    NavigationBar
+    NavigationBar,
+    AccessDenied
   },
 
   data: () => ({
@@ -51,6 +53,8 @@ export default {
     submitted: false,
     messages: [],
     valid: false,
+    activeUser: '',
+    activeProfile: '',
     selectedGroup: null,
     alertType: 'success',
     groupNameRules: [
@@ -116,6 +120,12 @@ export default {
           this.alertType = 'error';
           this.messages.push(error.response.data);
         });
+    },
+    fetchUser(userId) {
+      this.activeUser = userId;
+    },
+    fetchProfile(profile) {
+      this.activeProfile = profile;
     }
   }
 }

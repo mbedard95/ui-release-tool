@@ -3,7 +3,7 @@
         <NavigationBar @updateUser="fetchUser($event)" />
 
         <v-data-table v-model="selected" :headers="headers" :items="users" single-select item-key="userId" show-select
-            class="elevation-1">
+            class="elevation-1" @click:row="handleClick">
             <template v-slot:top>
                 <v-btn depressed :disabled="selected.length === 0" color="success" @click="setActiveUser">
                     Save Active User
@@ -11,8 +11,33 @@
             </template>
         </v-data-table>
         <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-            <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
+            <v-container>
+                <v-row>
+                    <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
+                    <v-spacer></v-spacer>
+                    <v-btn justify="end" color="green darken-4" @click="reload">Reload Page</v-btn>
+                </v-row>
+            </v-container>
         </v-alert>
+        <v-dialog v-model="detailsDialog" max-width="600px">
+            <v-card>
+                <v-container>
+                <h1>User Details</h1>
+                <v-card-title>Name:</v-card-title><v-card-text>{{detailsUser.firstName}} {{detailsUser.lastName}}</v-card-text>
+                <v-card-title>Email:</v-card-title><v-card-text>{{detailsUser.emailAddress}}</v-card-text>
+                <v-card-title>Profile:</v-card-title><v-card-text>{{detailsUser.userProfile}}</v-card-text>
+                <v-card  v-if="detailsUser && detailsUser.userProfile === 'Approver'">
+                    <v-card-title>Groups:</v-card-title>
+                   <v-container>
+                        <v-chip-group>
+                            <v-chip v-for="group in detailsUser.groups" :key="group">{{ group }}</v-chip>
+                        </v-chip-group>
+                        <v-card-text v-if="detailsUser.groups && detailsUser.groups.length === 0">None</v-card-text>
+                    </v-container> 
+                </v-card>
+            </v-container>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -30,6 +55,8 @@ export default {
     data: () => ({
         users: [],
         selected: [],
+        detailsUserId: '',
+        detailsUser: {},
         userId: '',
         headers: [
             {
@@ -44,6 +71,7 @@ export default {
         ],
         alertType: 'success',
         messages: [],
+        detailsDialog: false
     }),
 
     mounted() {
@@ -85,6 +113,21 @@ export default {
                         this.messages.push(error.response.data);
                     }
                 });
+        },
+        handleClick(row) {
+            this.detailsUserId = row.userId;
+            axios
+            .get('https://localhost:7060/api/Users/' + row.userId)
+            .then(response => {
+                this.detailsUser = response.data;
+            })
+            .catch(error => {
+                console.log(error)
+            });
+            this.detailsDialog = true;
+        },
+        reload() {
+            location.reload();
         }
     }
 }
