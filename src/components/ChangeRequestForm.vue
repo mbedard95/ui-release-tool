@@ -21,7 +21,7 @@
             
         </v-form>
 
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="addChangeRequest">
+        <v-btn :disabled="!valid && !disableSubmit" color="success" class="mr-4" @click="addChangeRequest">
             Submit
         </v-btn>
 
@@ -75,6 +75,7 @@ export default {
         assignedTags: [],
         alertType: 'success',
         messages: [],
+        disableSubmit: false
     }),
     props: {
         userId: {
@@ -113,6 +114,7 @@ export default {
             this.assignedGroups = groups
         },
         addChangeRequest() {
+            this.disableSubmit = true;
             this.messages = [];
             axios
                 .post('https://localhost:7060/api/ChangeRequests', {
@@ -128,6 +130,7 @@ export default {
                     this.alertType = 'success'
                     this.messages.push('Change Request submitted successfully');
                     this.$refs.form.reset();
+                    this.disableSubmit = false;
                 })
                 .catch(error => {
                     console.log(error);

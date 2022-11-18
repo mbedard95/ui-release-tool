@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
-        <ChangeRequestSearch />
+        <ChangeRequestSearch @updateParams="fetchParams($event)" @initiateSearch="searchChangeRequests" />
         <template>
             <v-data-table :headers="headers" :items="changeRequests" :items-per-page="10" class="elevation-1"
                 @click:row="handleClick">
@@ -9,7 +9,8 @@
         </template>
         <v-dialog v-model="detailsDialog">
             <v-card>
-                <ChangeRequestDetails :changeRequestId="changeRequestId" :key="changeRequestId" @updateApprovals="fetchApprovals($event)" />
+                <ChangeRequestDetails :changeRequestId="changeRequestId" :key="changeRequestId"
+                    @updateApprovals="fetchApprovals($event)" />
                 <v-card-actions>
                     <v-btn v-if="canDelete" color="error" icon x-large @click="deleteDialog = true;">
                         <v-icon dark>
@@ -17,10 +18,12 @@
                         </v-icon>
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn v-if="canApprove" color="success" text @click="updateApproval('Approved'); detailsDialog = false;">
+                    <v-btn v-if="canApprove" color="success" text
+                        @click="updateApproval('Approved'); detailsDialog = false;">
                         Approve
                     </v-btn>
-                    <v-btn v-if="canApprove" color="error" text @click="updateApproval('Denied'); detailsDialog = false;">
+                    <v-btn v-if="canApprove" color="error" text
+                        @click="updateApproval('Denied'); detailsDialog = false;">
                         Deny
                     </v-btn>
                     <v-btn v-if="canDeploy" color="primary" text @click="detailsDialog = false;">Mark Deployed</v-btn>
@@ -86,6 +89,7 @@ export default {
         activeUser: '',
         activeProfile: '',
         action: '',
+        searchParams: {},
         headers: [
             {
                 text: 'Title',
@@ -119,9 +123,9 @@ export default {
             for (let i = 0; i < this.approvals.length; i++) {
                 if (this.approvals[i].userId == this.activeUser) {
                     let changeId = this.approvals[i].changeRequestId;
-                    for (let j = 0; j < this.changeRequests.length; j++){
+                    for (let j = 0; j < this.changeRequests.length; j++) {
                         if (this.changeRequests[j].changeRequestId === changeId
-                        && this.changeRequests[j].changeRequestStatus === 'Active') {
+                            && this.changeRequests[j].changeRequestStatus === 'Active') {
                             return true
                         }
                     }
@@ -139,7 +143,7 @@ export default {
 
     mounted() {
         axios
-            .get('https://localhost:7060/api/ChangeRequests', {params: {includeInactive: this.includeInactive}})
+            .get('https://localhost:7060/api/ChangeRequests', { params: { includeInactive: this.includeInactive } })
             .then(response => {
                 this.changeRequests = response.data;
             })
@@ -159,7 +163,7 @@ export default {
                 .delete('https://localhost:7060/api/ChangeRequests/' + this.changeRequestId)
                 .then(() => {
                     axios
-                        .get('https://localhost:7060/api/ChangeRequests', {params: {includeInactive: this.includeInactive}})
+                        .get('https://localhost:7060/api/ChangeRequests', { params: { includeInactive: this.includeInactive } })
                         .then(response => {
                             this.changeRequests = response.data;
                         })
@@ -187,6 +191,9 @@ export default {
         fetchApprovals(approvals) {
             this.approvals = approvals;
         },
+        fetchParams(params) {
+            this.searchParams = params;
+        },
         getApprovalId() {
             for (let i = 0; i < this.approvals.length; i++) {
                 if (this.approvals[i].userId == this.activeUser) {
@@ -194,6 +201,16 @@ export default {
                 }
             }
             return '';
+        },
+        searchChangeRequests() {
+            axios
+                .post('https://localhost:7060/api/ChangeRequests/SearchChangeRequests', this.searchParams)
+                .then(response => {
+                    this.changeRequests = response.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
         }
     }
 }

@@ -1,7 +1,6 @@
 <template>
     <v-container>
         <NavigationBar @updateUser="fetchUser($event)" />
-
         <v-data-table v-model="selected" :headers="headers" :items="users" single-select item-key="userId" show-select
             class="elevation-1" @click:row="handleClick">
             <template v-slot:top>
@@ -75,7 +74,16 @@ export default {
     }),
 
     mounted() {
-        axios
+        
+    },
+
+    methods: {
+        fetchUser(userId) {
+            this.userId = userId;
+            this.getUsers();
+        },
+        getUsers() {
+            axios
             .get('https://localhost:7060/api/Users')
             .then(response => {
                 this.users = response.data;
@@ -89,11 +97,6 @@ export default {
             .catch(error => {
                 console.log(error)
             });
-    },
-
-    methods: {
-        fetchUser(userId) {
-            this.userId = userId;
         },
         setActiveUser() {
             this.messages = [];

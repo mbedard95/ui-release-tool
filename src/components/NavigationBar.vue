@@ -113,7 +113,7 @@ export default {
         userItems: [
             {
                 title: 'Add User',
-                link: '#/addUser'
+                link: '#/adduser'
             },
             {
                 title: 'View Users',

@@ -32,7 +32,7 @@ const routes = [
         component: GroupsPage
     },
     {
-      path: '/addUser',
+      path: '/adduser',
       name: 'AddUser',
       component: AddUserPage
     },
