@@ -3,7 +3,7 @@
         <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
         <ChangeRequestSearch @updateParams="fetchParams($event)" @initiateSearch="searchChangeRequests" />
         <template>
-            <v-data-table :headers="headers" :items="changeRequests" :items-per-page="10" class="elevation-1"
+            <v-data-table :headers="headers" :items="formattedChangeRequests" :items-per-page="10" class="elevation-1"
                 @click:row="handleClick">
             </v-data-table>
         </template>
@@ -67,6 +67,7 @@ import ChangeRequestSearch from '@/components/ChangeRequestSearch'
 import ChangeRequestDetails from '@/components/ChangeRequestDetails'
 import ChangeRequestForm from '@/components/ChangeRequestForm'
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
     name: 'ViewChangeRequestsPage',
@@ -104,6 +105,15 @@ export default {
     }),
 
     computed: {
+        formattedChangeRequests() {
+            let formattedList = [];
+            for (let i = 0; i < this.changeRequests.length; i++) {
+                let request = this.changeRequests[i];
+                request.created = this.formatDate(request.created);
+                formattedList.push(request);
+            }
+            return formattedList;
+        },
         canDelete() {
             if (this.changeRequestId != '') {
                 for (let i = 0; i < this.changeRequests.length; i++) {
@@ -211,6 +221,9 @@ export default {
                 .catch(error => {
                     console.log(error)
                 });
+        },
+        formatDate(date) {
+            return moment(date).format('MM/DD/YYYY hh:mm a');
         }
     }
 }

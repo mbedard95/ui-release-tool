@@ -3,11 +3,17 @@
         <h1>{{ title }}</h1>
         <v-container>
             <v-card-title>Description</v-card-title>
-            <v-card-text>{{ description }}</v-card-text>
+            <v-card-text>
+                <v-textarea outlined :readonly="true" :auto-grow="true" v-model="description"></v-textarea>
+            </v-card-text>
             <v-card-title>Release Steps</v-card-title>
-            <v-card-text>{{ releaseSteps }}</v-card-text>
+            <v-card-text>
+                <v-textarea outlined :readonly="true" :auto-grow="true" v-model="releaseSteps"></v-textarea>
+            </v-card-text>
             <v-card-title>Rollback Procedure</v-card-title>
-            <v-card-text>{{ rollbackProcedure }}</v-card-text>
+            <v-card-text>
+                <v-textarea outlined :readonly="true" :auto-grow="true" v-model="rollbackProcedure"></v-textarea>
+            </v-card-text>
         </v-container>
         <v-row>
             <v-col>
@@ -39,7 +45,7 @@
             </v-col>
         </v-row>
         <v-dialog v-model="approvalDialog">
-            <v-card>
+            <v-card v-if="approvals.length > 0">
                 <v-simple-table>
                     <template v-slot:default>
                         <thead>
@@ -70,12 +76,17 @@
                                 <td>{{ item.lastName }}</td>
                                 <td>{{ item.emailAddress }}</td>
                                 <td>{{ item.approvalStatus }}</td>
-                                <td>{{ item.created }}</td>
+                                <td>{{ formatDate(item.created) }}</td>
                                 <td>{{ getApprovedDisplayDate(item.approvedDate) }}</td>
                             </tr>
                         </tbody>
                     </template>
                 </v-simple-table>
+            </v-card>
+            <v-card v-else>
+                <v-container>
+                    <v-card-title>No approvals found.</v-card-title>
+                </v-container>
             </v-card>
         </v-dialog>
     </v-container>
@@ -84,6 +95,7 @@
 <script>
 
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
     name: 'ChangeRequestDetails',
@@ -163,7 +175,10 @@ export default {
             if (date === '9999-12-31T23:59:59.997') {
                 return 'N/A';
             }
-            else return date;
+            else return this.formatDate(date);
+        },
+        formatDate(date) {
+            return moment(date).format('MM/DD/YYYY hh:mm a');
         }
     }
 }
