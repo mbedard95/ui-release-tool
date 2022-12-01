@@ -1,11 +1,13 @@
 <template>
     <v-container>
         <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
-        <v-container v-if="activeProfile === 'ReadAndWriteOnly'">
-            <h1>Add Change Request</h1>
-            <ChangeRequestForm :userId="userId" />
+        <v-container v-if="activeProfile">
+            <v-container v-if="activeProfile === 'ReadAndWriteOnly'">
+                <h1>Add Change Request</h1>
+                <ChangeRequestForm :userId="userId" />
+            </v-container>
+            <AccessDenied v-else />
         </v-container>
-        <AccessDenied v-else />
     </v-container>
 </template>
   

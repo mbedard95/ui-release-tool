@@ -19,7 +19,7 @@
                         @click="dateDialog = true"></v-text-field>
                 </v-col>
                 <v-col>
-                    <v-checkbox v-model="assignedToUser" label="Assigned to me"></v-checkbox>
+                    <v-checkbox v-if="activeProfile === 'Approver'" v-model="assignedToUser" label="Assigned to me"></v-checkbox>
                 </v-col>
                 <v-col>
                     <v-btn depressed @click="handleFilterClick">
@@ -68,9 +68,15 @@ export default {
         dateDialog: false,
         filterButton: 'mdi-menu-down',
         showAllFilters: false,
-        statusItems: ['Active', 'Approved', 'Abandoned', 'Deployed'],
+        statusItems: ['Active', 'Approved', 'Abandoned', 'Deployed', 'Blocked'],
         statusValues: []
     }),
+
+    props: {
+        activeProfile: {
+            type: String
+        }
+    },
 
     watch: {
         params() {

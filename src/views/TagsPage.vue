@@ -1,37 +1,38 @@
 <template>
   <v-container>
     <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
-    <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
-      <v-toolbar color="primary" dark>
-        <v-toolbar-title>Tags</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
+    <v-container v-if="activeProfile">
+      <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>Tags</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
 
-      <v-list>
-        <v-list-item-group v-model="selectedTag" color="error">
-          <v-list-item v-for="(item, i) in tags" :key="i" :value="item.tagId">
-            <v-list-item-content>
-              <v-list-item-title v-text="item.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <v-form ref="form" v-model="valid">
-        <v-text-field outlined v-model="newTag" :counter="50" :rules="tagNameRules" label="Add tag" required>
-        </v-text-field>
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
-          Submit
-        </v-btn>
-        <v-btn :disabled="!selectedTag" color="error" class="mr-4" @click="removeTag">
-          Delete Selected
-        </v-btn>
-        <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-          <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
-        </v-alert>
-      </v-form>
-    </v-card>
-    <AccessDenied v-else />
-
+        <v-list>
+          <v-list-item-group v-model="selectedTag" color="error">
+            <v-list-item v-for="(item, i) in tags" :key="i" :value="item.tagId">
+              <v-list-item-content>
+                <v-list-item-title v-text="item.name"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+        <v-form ref="form" v-model="valid">
+          <v-text-field outlined v-model="newTag" :counter="50" :rules="tagNameRules" label="Add tag" required>
+          </v-text-field>
+          <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
+            Submit
+          </v-btn>
+          <v-btn :disabled="!selectedTag" color="error" class="mr-4" @click="removeTag">
+            Delete Selected
+          </v-btn>
+          <v-alert v-if="messages.length > 0" v-bind:type="alertType">
+            <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
+          </v-alert>
+        </v-form>
+      </v-card>
+      <AccessDenied v-else />
+    </v-container>
 
   </v-container>
 </template>

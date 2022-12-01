@@ -128,6 +128,8 @@ export default {
                     return 'primary';
                 case 'Abandoned':
                     return 'error';
+                case 'Blocked':
+                    return 'warning';
                 default:
                     return 'secondary';
             }

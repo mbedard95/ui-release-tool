@@ -1,36 +1,37 @@
 <template>
   <v-container>
-    <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)"/>
-    <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
-      <v-toolbar color="primary" dark>
-        <v-toolbar-title>Groups</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-      <v-list>
-        <v-list-item-group v-model="selectedGroup" color="error">
-          <v-list-item v-for="(item, i) in groups" :key="i" :value="item.groupId">
-            <v-list-item-content>
-              <v-list-item-title v-text="item.groupName"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <v-form ref="form" v-model="valid">
-        <v-text-field outlined v-model="newGroup" :counter="50" :rules="groupNameRules" label="Add group" required>
-        </v-text-field>
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
-          Submit
-        </v-btn>
-        <v-btn :disabled="!selectedGroup" color="error" class="mr-4" @click="removeGroup">
-          Delete Selected
-        </v-btn>
-        <v-alert v-if="messages.length > 0" v-bind:type="alertType">
-          <div v-for="(message, i) in messages" :key="i">{{message}}</div>
-        </v-alert>
-      </v-form>
-    </v-card>
-    <AccessDenied v-else />
-
+    <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
+    <v-container v-if="activeProfile">
+      <v-card v-if="activeProfile === 'Admin'" class="mx-auto" max-width="600" tile>
+        <v-toolbar color="primary" dark>
+          <v-toolbar-title>Groups</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <v-list>
+          <v-list-item-group v-model="selectedGroup" color="error">
+            <v-list-item v-for="(item, i) in groups" :key="i" :value="item.groupId">
+              <v-list-item-content>
+                <v-list-item-title v-text="item.groupName"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+        <v-form ref="form" v-model="valid">
+          <v-text-field outlined v-model="newGroup" :counter="50" :rules="groupNameRules" label="Add group" required>
+          </v-text-field>
+          <v-btn :disabled="!valid" color="success" class="mr-4" @click="post">
+            Submit
+          </v-btn>
+          <v-btn :disabled="!selectedGroup" color="error" class="mr-4" @click="removeGroup">
+            Delete Selected
+          </v-btn>
+          <v-alert v-if="messages.length > 0" v-bind:type="alertType">
+            <div v-for="(message, i) in messages" :key="i">{{ message }}</div>
+          </v-alert>
+        </v-form>
+      </v-card>
+      <AccessDenied v-else />
+    </v-container>
   </v-container>
 </template>
   
@@ -81,11 +82,11 @@ export default {
           this.messages.push('Group submitted successfully');
           this.$refs.form.reset();
           axios
-      .get('https://localhost:7060/api/Groups')
-      .then(response => (this.groups = response.data))
-      .catch(error => {
-        console.log(error);
-      });
+            .get('https://localhost:7060/api/Groups')
+            .then(response => (this.groups = response.data))
+            .catch(error => {
+              console.log(error);
+            });
         })
         .catch(error => {
           console.log(error);

@@ -1,11 +1,13 @@
 <template>
     <v-container>
         <NavigationBar @updateUserProfile="fetchProfile($event)" />
-        <v-container v-if="activeProfile === 'Admin'">
-            <h1>Add User</h1>
-            <UserForm />
+        <v-container v-if="activeProfile">
+            <v-container v-if="activeProfile === 'Admin'">
+                <h1>Add User</h1>
+                <UserForm />
+            </v-container>
+            <AccessDenied v-else />
         </v-container>
-        <AccessDenied v-else />
     </v-container>
 </template>
   

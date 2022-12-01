@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <NavigationBar @updateUser="fetchUser($event)" @updateUserProfile="fetchProfile($event)" />
-        <ChangeRequestSearch @updateParams="fetchParams($event)" @initiateSearch="searchChangeRequests" />
+        <ChangeRequestSearch @updateParams="fetchParams($event)" @initiateSearch="searchChangeRequests" :activeProfile="activeProfile" />
         <template>
             <v-data-table :headers="headers" :items="formattedChangeRequests" :items-per-page="10" class="elevation-1"
                 @click:row="handleClick">
@@ -9,7 +9,7 @@
         </template>
         <v-dialog v-model="detailsDialog">
             <v-card>
-                <ChangeRequestDetails :changeRequestId="changeRequestId" :key="changeRequestId"
+                <ChangeRequestDetails :changeRequestId="selectedChangeRequest.changeRequestId" :key="selectedChangeRequest.changeRequestId"
                     @updateApprovals="fetchApprovals($event)" />
                 <v-card-actions>
                     <v-btn v-if="canDelete" color="error" icon x-large @click="deleteDialog = true;">
@@ -26,7 +26,6 @@
                         @click="updateApproval('Denied'); detailsDialog = false;">
                         Deny
                     </v-btn>
-                    <v-btn v-if="canDeploy" color="primary" text @click="detailsDialog = false;">Mark Deployed</v-btn>
                     <v-btn color="secondary" text @click="detailsDialog = false;">
                         Close
                     </v-btn>
@@ -52,11 +51,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="formDialog">
-            <v-card>
-                <ChangeRequestForm />
-            </v-card>
-        </v-dialog>
     </v-container>
 
 </template>
@@ -65,7 +59,6 @@
 import NavigationBar from '@/components/NavigationBar';
 import ChangeRequestSearch from '@/components/ChangeRequestSearch'
 import ChangeRequestDetails from '@/components/ChangeRequestDetails'
-import ChangeRequestForm from '@/components/ChangeRequestForm'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -75,17 +68,15 @@ export default {
     components: {
         NavigationBar,
         ChangeRequestSearch,
-        ChangeRequestDetails,
-        ChangeRequestForm
+        ChangeRequestDetails
     },
 
     data: () => ({
-        changeRequestId: '',
+        selectedChangeRequest: {},
         approvals: [],
         changeRequests: [],
         detailsDialog: false,
         deleteDialog: false,
-        formDialog: false,
         includeInactive: true,
         activeUser: '',
         activeProfile: '',
@@ -115,9 +106,9 @@ export default {
             return formattedList;
         },
         canDelete() {
-            if (this.changeRequestId != '') {
+            if (this.selectedChangeRequest) {
                 for (let i = 0; i < this.changeRequests.length; i++) {
-                    if (this.changeRequests[i].changeRequestId === this.changeRequestId
+                    if (this.changeRequests[i].changeRequestId === this.selectedChangeRequest.changeRequestId
                         && this.changeRequests[i].userId === this.activeUser
                         && this.changeRequests[i].changeRequestStatus != 'Abandoned') {
                         return true;
@@ -135,7 +126,8 @@ export default {
                     let changeId = this.approvals[i].changeRequestId;
                     for (let j = 0; j < this.changeRequests.length; j++) {
                         if (this.changeRequests[j].changeRequestId === changeId
-                            && this.changeRequests[j].changeRequestStatus === 'Active') {
+                            && (this.changeRequests[j].changeRequestStatus === 'Active'
+                            || this.changeRequests[j].changeRequestStatus === 'Blocked')) {
                             return true
                         }
                     }
@@ -164,13 +156,13 @@ export default {
 
     methods: {
         handleClick(row) {
-            this.changeRequestId = row.changeRequestId;
+            this.selectedChangeRequest = row;
             this.detailsDialog = true;
             this.$forceUpdate();
         },
         deleteChangeRequest() {
             axios
-                .delete('https://localhost:7060/api/ChangeRequests/' + this.changeRequestId)
+                .delete('https://localhost:7060/api/ChangeRequests/' + this.selectedChangeRequest.changeRequestId)
                 .then(() => {
                     axios
                         .get('https://localhost:7060/api/ChangeRequests', { params: { includeInactive: this.includeInactive } })

@@ -137,7 +137,7 @@ export default {
     computed: {
         groupNames() {
             let names = [];
-            for (let i = 0; i < this.groups.length; i++) {
+            for (let i = 0; i < this.assignedGroups.length; i++) {
                 names.push(this.groups[i].groupName)
             }
             return names;

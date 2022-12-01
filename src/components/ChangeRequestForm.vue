@@ -21,7 +21,7 @@
             
         </v-form>
 
-        <v-btn :disabled="!valid && !disableSubmit" color="success" class="mr-4" @click="addChangeRequest">
+        <v-btn :disabled="!valid || disableSubmit" color="success" class="mr-4" @click="addChangeRequest">
             Submit
         </v-btn>
 
